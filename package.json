@@ -1,0 +1,163 @@
+{
+  "name": "codex-reviewer",
+  "displayName": "Codex Reviewer",
+  "description": "GitHub PR-style line comments on diffs, staged in VS Code and attached to your Codex chat with one click",
+  "version": "0.1.0",
+  "publisher": "nihildigit",
+  "author": "NihilDigit",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/NihilDigit/codex-reviewer.git"
+  },
+  "license": "MIT",
+  "engines": {
+    "vscode": "^1.96.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "codexReviewer.addComment",
+        "title": "Add review comment",
+        "enablement": "!commentIsEmpty"
+      },
+      {
+        "command": "codexReviewer.replyComment",
+        "title": "Add note",
+        "enablement": "!commentIsEmpty"
+      },
+      {
+        "command": "codexReviewer.deleteComment",
+        "title": "Delete note"
+      },
+      {
+        "command": "codexReviewer.deleteThread",
+        "title": "Delete thread"
+      },
+      {
+        "command": "codexReviewer.stageToCodex",
+        "title": "Codex Reviewer: Add Reviews to Codex Chat",
+        "icon": "$(send)"
+      },
+      {
+        "command": "codexReviewer.addCodexComment",
+        "title": "Codex Reviewer: Add Codex Comment",
+        "icon": "$(comment-add)"
+      },
+      {
+        "command": "codexReviewer.clearStaged",
+        "title": "Codex Reviewer: Clear Staged Reviews"
+      },
+      {
+        "command": "codexReviewer.openPendingFile",
+        "title": "Codex Reviewer: Open Pending Reviews File"
+      }
+    ],
+    "menus": {
+      "commandPalette": [
+        {
+          "command": "codexReviewer.addComment",
+          "when": "false"
+        },
+        {
+          "command": "codexReviewer.replyComment",
+          "when": "false"
+        },
+        {
+          "command": "codexReviewer.deleteComment",
+          "when": "false"
+        },
+        {
+          "command": "codexReviewer.deleteThread",
+          "when": "false"
+        }
+      ],
+      "comments/commentThread/context": [
+        {
+          "command": "codexReviewer.addComment",
+          "group": "inline",
+          "when": "commentController == codex-review && commentThreadIsEmpty"
+        },
+        {
+          "command": "codexReviewer.replyComment",
+          "group": "inline",
+          "when": "commentController == codex-review && !commentThreadIsEmpty"
+        }
+      ],
+      "comments/comment/title": [
+        {
+          "command": "codexReviewer.deleteComment",
+          "group": "inline",
+          "when": "commentController == codex-review"
+        }
+      ],
+      "comments/commentThread/title": [
+        {
+          "command": "codexReviewer.stageToCodex",
+          "group": "inline@1",
+          "when": "commentController == codex-review"
+        },
+        {
+          "command": "codexReviewer.deleteThread",
+          "group": "inline@2",
+          "when": "commentController == codex-review"
+        }
+      ],
+      "editor/title": [
+        {
+          "command": "codexReviewer.stageToCodex",
+          "group": "navigation",
+          "when": "isInDiffEditor && codexReviewer.hasStaged"
+        }
+      ],
+      "editor/context": [
+        {
+          "command": "codexReviewer.addCodexComment",
+          "group": "codex@1",
+          "when": "editorTextFocus"
+        }
+      ]
+    },
+    "keybindings": [
+      {
+        "command": "codexReviewer.addCodexComment",
+        "key": "ctrl+alt+c",
+        "mac": "cmd+alt+c",
+        "when": "editorTextFocus"
+      }
+    ],
+    "configuration": {
+      "title": "Codex Reviewer",
+      "properties": {
+        "codexReviewer.pendingFile": {
+          "type": "string",
+          "default": ".codex/pending-reviews.md",
+          "description": "Workspace-relative path of the file that mirrors the staged reviews and is attached to Codex chat"
+        },
+        "codexReviewer.gitExclude": {
+          "type": "boolean",
+          "default": true,
+          "description": "Automatically add the pending reviews file to the repository's .git/info/exclude so it never shows up in git status"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "compile": "esbuild src/extension.ts --bundle --outfile=out/extension.js --external:vscode --format=cjs --platform=node --sourcemap",
+    "watch": "esbuild src/extension.ts --bundle --outfile=out/extension.js --external:vscode --format=cjs --platform=node --sourcemap --watch",
+    "typecheck": "tsc --noEmit",
+    "vscode:prepublish": "npm run compile"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "@types/vscode": "^1.96.0",
+    "esbuild": "^0.25.0",
+    "typescript": "^5.9.0"
+  }
+}
