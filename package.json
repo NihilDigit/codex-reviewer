@@ -2,7 +2,7 @@
   "name": "codex-reviewer",
   "displayName": "Codex Reviewer",
   "description": "GitHub PR-style line comments on diffs, staged in VS Code and attached to your Codex chat with one click",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "publisher": "NihilDigit",
   "author": "NihilDigit",
   "repository": {
@@ -59,7 +59,8 @@
       },
       {
         "command": "codexReviewer.clearStaged",
-        "title": "Codex Reviewer: Clear Staged Reviews"
+        "title": "Codex Reviewer: Clear Staged Reviews",
+        "icon": "$(clear-all)"
       },
       {
         "command": "codexReviewer.openPendingFile",
@@ -121,6 +122,11 @@
           "command": "codexReviewer.stageToCodex",
           "group": "navigation",
           "when": "isInDiffEditor && codexReviewer.hasStaged"
+        },
+        {
+          "command": "codexReviewer.clearStaged",
+          "group": "navigation",
+          "when": "codexReviewer.hasStaged"
         }
       ],
       "editor/context": [

@@ -77,6 +77,9 @@ export function activate(context: vscode.ExtensionContext): void {
         }
         await staging.flush();
         await addFileToCodexThread(uri);
+        staging.clear();
+        reviews.clearAll();
+        await staging.flush();
       } catch (err) {
         void vscode.window.showErrorMessage(
           `Codex Reviewer: failed to attach reviews — ${err instanceof Error ? err.message : String(err)}`
