@@ -2,7 +2,7 @@
 
 A companion extension for the official Codex VS Code extension (`openai.chatgpt`) that brings GitHub PR-style review comments to your editor. Comment on any line or selection — in a diff view or a regular file — and the notes stay staged inside VS Code. When the batch is ready, one click attaches it to the Codex chat composer as a single file chip that travels with your next prompt. Delete the chip and the reviews stay behind.
 
-![Workflow](assets/flow.svg)
+![Workflow](https://raw.githubusercontent.com/NihilDigit/codex-reviewer/main/assets/flow.svg)
 
 [中文介绍](README.zh-CN.md)
 

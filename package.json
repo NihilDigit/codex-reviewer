@@ -3,13 +3,14 @@
   "displayName": "Codex Reviewer",
   "description": "GitHub PR-style line comments on diffs, staged in VS Code and attached to your Codex chat with one click",
   "version": "0.1.0",
-  "publisher": "nihildigit",
+  "publisher": "NihilDigit",
   "author": "NihilDigit",
   "repository": {
     "type": "git",
     "url": "https://github.com/NihilDigit/codex-reviewer.git"
   },
   "license": "MIT",
+  "icon": "assets/icon.png",
   "engines": {
     "vscode": "^1.96.0"
   },
@@ -152,11 +153,13 @@
     "compile": "esbuild src/extension.ts --bundle --outfile=out/extension.js --external:vscode --format=cjs --platform=node --sourcemap",
     "watch": "esbuild src/extension.ts --bundle --outfile=out/extension.js --external:vscode --format=cjs --platform=node --sourcemap --watch",
     "typecheck": "tsc --noEmit",
+    "package:marketplace": "cp README.md .README.md.bak; sed -i 's#https://raw.githubusercontent.com/NihilDigit/codex-reviewer/main/assets/flow.svg#assets/flow.png#' README.md; vsce package; rc=$?; mv .README.md.bak README.md; exit $rc",
     "vscode:prepublish": "npm run compile"
   },
   "devDependencies": {
     "@types/node": "^22.0.0",
     "@types/vscode": "^1.96.0",
+    "@vscode/vsce": "^3.9.2",
     "esbuild": "^0.25.0",
     "typescript": "^5.9.0"
   }

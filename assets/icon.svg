@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128">
+  <!-- comment bubble: white fill, black outline -->
+  <path d="M 42 32 h 44 a 14 14 0 0 1 14 14 v 26 a 14 14 0 0 1 -14 14 h -22 l -18 18 v -18 h -4 a 14 14 0 0 1 -14 -14 v -26 a 14 14 0 0 1 14 -14 z"
+        fill="#ffffff" stroke="#000000" stroke-width="6" stroke-linejoin="round"/>
+  <!-- plus -->
+  <rect x="59" y="43" width="10" height="32" rx="3" fill="#000000"/>
+  <rect x="48" y="54" width="32" height="10" rx="3" fill="#000000"/>
+</svg>
