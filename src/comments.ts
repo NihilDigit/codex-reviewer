@@ -5,7 +5,7 @@ import { Staging, StagedEntry } from './staging';
 class ReviewComment implements vscode.Comment {
   constructor(
     public readonly id: string,
-    public body: string,
+    public body: string | vscode.MarkdownString,
     public mode: vscode.CommentMode,
     public author: vscode.CommentAuthorInformation,
     public label: string | undefined,
@@ -50,6 +50,14 @@ export class ReviewController implements vscode.Disposable {
       ),
       vscode.commands.registerCommand('codexReviewer.addCodexComment', () =>
         this.addCodexComment()
+      ),
+      vscode.commands.registerCommand(
+        'codexReviewer.editComment',
+        (comment: ReviewComment) => this.editComment(comment)
+      ),
+      vscode.commands.registerCommand(
+        'codexReviewer.saveComment',
+        (comment: ReviewComment) => this.saveComment(comment)
       ),
       vscode.commands.registerCommand(
         'codexReviewer.deleteComment',
@@ -125,6 +133,30 @@ export class ReviewController implements vscode.Disposable {
     }
     this.staging.addNote(entry.id, reply.text);
     reply.thread.comments = [...reply.thread.comments, this.makeComment(reply.text, reply.thread)];
+  }
+
+  private editComment(comment: ReviewComment): void {
+    comment.mode = vscode.CommentMode.Editing;
+    const thread = comment.parent;
+    if (thread) {
+      // Reassign comments so the widget picks up the mode change.
+      thread.comments = [...thread.comments];
+    }
+  }
+
+  private saveComment(comment: ReviewComment): void {
+    const thread = comment.parent;
+    const text = typeof comment.body === 'string' ? comment.body : comment.body.value;
+    comment.body = text;
+    comment.mode = vscode.CommentMode.Preview;
+    if (thread) {
+      const entry = this.threadEntries.get(thread);
+      const noteIndex = thread.comments.findIndex((c) => (c as ReviewComment).id === comment.id);
+      if (entry && noteIndex >= 0) {
+        this.staging.updateNote(entry.id, noteIndex, text);
+      }
+      thread.comments = [...thread.comments];
+    }
   }
 
   private deleteComment(comment: ReviewComment): void {

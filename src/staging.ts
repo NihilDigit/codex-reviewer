@@ -76,8 +76,32 @@ export class Staging implements vscode.Disposable {
     this.changed();
   }
 
-  clear(): void {
+  updateNote(entryId: number, noteIndex: number, text: string): void {
+    const entry = this.entries.find((e) => e.id === entryId);
+    if (!entry || noteIndex < 0 || noteIndex >= entry.notes.length) {
+      return;
+    }
+    entry.notes[noteIndex] = text;
+    this.changed();
+  }
+
+  /**
+   * Clear the staged entries. With `keepFile`, the pending mirror file is left
+   * untouched: the Codex composer may read it lazily (after the chip is
+   * attached, or only when the prompt is actually sent), so rewriting it to
+   * an empty document here would make Codex send an empty file. The next
+   * staged comment flushes and overwrites the file anyway.
+   */
+  clear(opts?: { keepFile?: boolean }): void {
     this.entries = [];
+    if (opts?.keepFile) {
+      if (this.writeTimer) {
+        clearTimeout(this.writeTimer);
+        this.writeTimer = undefined;
+      }
+      this._onDidChange.fire();
+      return;
+    }
     this.changed();
   }
 

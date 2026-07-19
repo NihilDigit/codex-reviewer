@@ -77,9 +77,11 @@ export function activate(context: vscode.ExtensionContext): void {
         }
         await staging.flush();
         await addFileToCodexThread(uri);
-        staging.clear();
+        // Do not rewrite the pending file here: Codex reads it lazily, so
+        // clearing it now would attach an empty document. State is cleared
+        // in memory only; the file is overwritten on the next staged comment.
+        staging.clear({ keepFile: true });
         reviews.clearAll();
-        await staging.flush();
       } catch (err) {
         void vscode.window.showErrorMessage(
           `Codex Reviewer: failed to attach reviews — ${err instanceof Error ? err.message : String(err)}`

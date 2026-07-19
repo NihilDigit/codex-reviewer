@@ -2,7 +2,7 @@
   "name": "codex-reviewer",
   "displayName": "Codex Reviewer",
   "description": "GitHub PR-style line comments on diffs, staged in VS Code and attached to your Codex chat with one click",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "publisher": "NihilDigit",
   "author": "NihilDigit",
   "repository": {
@@ -38,6 +38,14 @@
         "command": "codexReviewer.replyComment",
         "title": "Add note",
         "enablement": "!commentIsEmpty"
+      },
+      {
+        "command": "codexReviewer.editComment",
+        "title": "Edit note"
+      },
+      {
+        "command": "codexReviewer.saveComment",
+        "title": "Save note"
       },
       {
         "command": "codexReviewer.deleteComment",
@@ -78,6 +86,14 @@
           "when": "false"
         },
         {
+          "command": "codexReviewer.editComment",
+          "when": "false"
+        },
+        {
+          "command": "codexReviewer.saveComment",
+          "when": "false"
+        },
+        {
           "command": "codexReviewer.deleteComment",
           "when": "false"
         },
@@ -100,9 +116,21 @@
       ],
       "comments/comment/title": [
         {
+          "command": "codexReviewer.editComment",
+          "group": "inline@1",
+          "when": "commentController == codex-review && commentMode == preview"
+        },
+        {
           "command": "codexReviewer.deleteComment",
+          "group": "inline@2",
+          "when": "commentController == codex-review && commentMode == preview"
+        }
+      ],
+      "comments/comment/context": [
+        {
+          "command": "codexReviewer.saveComment",
           "group": "inline",
-          "when": "commentController == codex-review"
+          "when": "commentController == codex-review && commentMode == editing"
         }
       ],
       "comments/commentThread/title": [
