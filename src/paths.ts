@@ -9,12 +9,12 @@ export function normalizePendingFilePath(value: string): string {
     path.win32.isAbsolute(value) ||
     normalizedSeparators.split('/').includes('..')
   ) {
-    throw new Error('codexReviewer.pendingFile must be a path inside the workspace.');
+    throw new Error('agentReviewer.pendingFile must be a path inside the workspace.');
   }
 
   const normalized = path.posix.normalize(normalizedSeparators);
   if (normalized === '.' || normalized.endsWith('/')) {
-    throw new Error('codexReviewer.pendingFile must point to a file.');
+    throw new Error('agentReviewer.pendingFile must point to a file.');
   }
   return normalized;
 }

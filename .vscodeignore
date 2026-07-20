@@ -1,7 +1,9 @@
 src/**
 test/**
+hooks/**
 node_modules/**
 tsconfig.json
+kimi.plugin.json
 .gitignore
 .README.md.bak
 out/*.map

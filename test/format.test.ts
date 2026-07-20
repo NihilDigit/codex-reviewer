@@ -28,6 +28,6 @@ describe('review markdown formatting', () => {
   });
 
   test('formats an empty review file', () => {
-    expect(formatReviewFile([])).toBe('# Codex Reviews (0)\n\nNo staged review comments.\n');
+    expect(formatReviewFile([])).toBe('# Code Reviews (0)\n\nNo staged review comments.\n');
   });
 });

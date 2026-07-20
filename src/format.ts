@@ -57,7 +57,7 @@ export function formatEntry(entry: ReviewEntryData, index: number): string {
 
 export function formatReviewFile(entries: ReviewEntryData[]): string {
   const lines: string[] = [];
-  lines.push(`# Codex Reviews (${entries.length})`);
+  lines.push(`# Code Reviews (${entries.length})`);
   lines.push('');
   if (entries.length === 0) {
     lines.push('No staged review comments.');

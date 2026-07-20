@@ -26,7 +26,7 @@ export class ReviewController implements vscode.Disposable {
   private commentSeq = 0;
 
   constructor(private readonly staging: Staging) {
-    this.controller = vscode.comments.createCommentController('codex-review', 'Codex Review');
+    this.controller = vscode.comments.createCommentController('agent-review', 'Agent Review');
     this.controller.options = { prompt: 'Write a review note…' };
     this.controller.commentingRangeProvider = {
       provideCommentingRanges: (document: vscode.TextDocument): vscode.Range[] => {
@@ -43,29 +43,29 @@ export class ReviewController implements vscode.Disposable {
     this.disposables.push(this.controller);
 
     this.disposables.push(
-      vscode.commands.registerCommand('codexReviewer.addComment', (reply: vscode.CommentReply) =>
+      vscode.commands.registerCommand('agentReviewer.addComment', (reply: vscode.CommentReply) =>
         this.addComment(reply)
       ),
-      vscode.commands.registerCommand('codexReviewer.replyComment', (reply: vscode.CommentReply) =>
+      vscode.commands.registerCommand('agentReviewer.replyComment', (reply: vscode.CommentReply) =>
         this.replyComment(reply)
       ),
-      vscode.commands.registerCommand('codexReviewer.addCodexComment', () =>
-        this.addCodexComment()
+      vscode.commands.registerCommand('agentReviewer.addReviewComment', () =>
+        this.addReviewComment()
       ),
       vscode.commands.registerCommand(
-        'codexReviewer.editComment',
+        'agentReviewer.editComment',
         (comment: ReviewComment) => this.editComment(comment)
       ),
       vscode.commands.registerCommand(
-        'codexReviewer.saveComment',
+        'agentReviewer.saveComment',
         (input: { thread: vscode.CommentThread; commentUniqueId: number; text: string }) =>
           this.saveComment(input)
       ),
       vscode.commands.registerCommand(
-        'codexReviewer.deleteComment',
+        'agentReviewer.deleteComment',
         (comment: ReviewComment) => this.deleteComment(comment)
       ),
-      vscode.commands.registerCommand('codexReviewer.deleteThread', (thread: vscode.CommentThread) =>
+      vscode.commands.registerCommand('agentReviewer.deleteThread', (thread: vscode.CommentThread) =>
         this.deleteThread(thread)
       )
     );
@@ -78,14 +78,14 @@ export class ReviewController implements vscode.Disposable {
    * "select comment provider" picker that the gutter + shows when several
    * controllers match the same line.
    */
-  private addCodexComment(): void {
+  private addReviewComment(): void {
     const editor = vscode.window.activeTextEditor;
     if (!editor) {
       return;
     }
     const scheme = editor.document.uri.scheme;
     if (scheme !== 'file' && scheme !== 'git') {
-      void vscode.window.showInformationMessage('Codex Reviewer: not a commentable document.');
+      void vscode.window.showInformationMessage('Agent Reviewer: not a commentable document.');
       return;
     }
     const selection = editor.selection;
@@ -108,7 +108,7 @@ export class ReviewController implements vscode.Disposable {
   private async addComment(reply: vscode.CommentReply): Promise<void> {
     const thread = reply.thread;
     if (!thread.range) {
-      void vscode.window.showErrorMessage('Codex Reviewer: comment thread has no line range.');
+      void vscode.window.showErrorMessage('Agent Reviewer: comment thread has no line range.');
       return;
     }
     let captured;
@@ -116,7 +116,7 @@ export class ReviewController implements vscode.Disposable {
       captured = await captureContext(thread.uri, thread.range);
     } catch (err) {
       void vscode.window.showErrorMessage(
-        `Codex Reviewer: failed to capture context — ${err instanceof Error ? err.message : String(err)}`
+        `Agent Reviewer: failed to capture context — ${err instanceof Error ? err.message : String(err)}`
       );
       return;
     }

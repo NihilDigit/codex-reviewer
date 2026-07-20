@@ -1,0 +1,16 @@
+{
+  "name": "agent-reviewer",
+  "version": "0.5.0",
+  "description": "Pick up code review comments staged by the Agent Reviewer VS Code extension on your next message",
+  "interface": {
+    "displayName": "Agent Reviewer",
+    "shortDescription": "Injects VS Code-staged code reviews into your prompt"
+  },
+  "hooks": [
+    {
+      "event": "UserPromptSubmit",
+      "command": "bash ./hooks/inject-reviews.sh",
+      "timeout": 10
+    }
+  ]
+}

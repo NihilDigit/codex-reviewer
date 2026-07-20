@@ -11,8 +11,9 @@ export interface StagedEntry {
 
 /**
  * Holds the staged (pending) review entries and keeps a markdown file in the
- * workspace mirroring them. That file is what gets attached to the Codex chat
- * composer, so it always reflects the current staged set.
+ * workspace mirroring them. That file is the hand-off point for agents: the
+ * Codex chat chip points at it, and the Kimi CLI hook injects it on the
+ * user's next prompt, so it always reflects the current staged set.
  */
 export class Staging implements vscode.Disposable {
   private entries: StagedEntry[] = [];
@@ -87,10 +88,10 @@ export class Staging implements vscode.Disposable {
 
   /**
    * Clear the staged entries. With `keepFile`, the pending mirror file is left
-   * untouched: the Codex composer may read it lazily (after the chip is
-   * attached, or only when the prompt is actually sent), so rewriting it to
-   * an empty document here would make Codex send an empty file. The next
-   * staged comment flushes and overwrites the file anyway.
+   * untouched: an agent may read it lazily (the Codex chip after attaching,
+   * or the Kimi hook on the user's next prompt), so rewriting it to an empty
+   * document here would hand the agent an empty file. The next staged comment
+   * flushes and overwrites the file anyway.
    */
   clear(opts?: { keepFile?: boolean }): void {
     this.entries = [];
@@ -111,8 +112,8 @@ export class Staging implements vscode.Disposable {
       return undefined;
     }
     const configuredPath = vscode.workspace
-      .getConfiguration('codexReviewer')
-      .get<string>('pendingFile', '.codex/pending-reviews.md');
+      .getConfiguration('agentReviewer')
+      .get<string>('pendingFile', '.agent-reviewer/pending-reviews.md');
     const rel = normalizePendingFilePath(configuredPath);
     return vscode.Uri.joinPath(folder.uri, rel);
   }
@@ -145,7 +146,7 @@ export class Staging implements vscode.Disposable {
     this.writeTimer = setTimeout(() => {
       void this.flush().catch((err: unknown) => {
         void vscode.window.showErrorMessage(
-          `Codex Reviewer: failed to update pending reviews — ${err instanceof Error ? err.message : String(err)}`
+          `Agent Reviewer: failed to update pending reviews — ${err instanceof Error ? err.message : String(err)}`
         );
       });
     }, 300);

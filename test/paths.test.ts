@@ -3,7 +3,7 @@ import { normalizePendingFilePath } from '../src/paths';
 
 describe('pending review file paths', () => {
   test('normalizes safe workspace-relative paths', () => {
-    expect(normalizePendingFilePath('.codex/./pending.md')).toBe('.codex/pending.md');
+    expect(normalizePendingFilePath('.agent-reviewer/./pending.md')).toBe('.agent-reviewer/pending.md');
     expect(normalizePendingFilePath('reviews\\pending.md')).toBe('reviews/pending.md');
   });
 

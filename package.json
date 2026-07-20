@@ -1,13 +1,13 @@
 {
-  "name": "codex-reviewer",
-  "displayName": "Codex Reviewer",
-  "description": "GitHub PR-style line comments on diffs, staged in VS Code and attached to your Codex chat with one click",
-  "version": "0.4.1",
+  "name": "agent-reviewer",
+  "displayName": "Agent Reviewer",
+  "description": "GitHub PR-style line comments on diffs, staged in VS Code and delivered to your coding agent (Codex chat chip or Kimi CLI hook) with one click",
+  "version": "0.5.0",
   "publisher": "NihilDigit",
   "author": "NihilDigit",
   "repository": {
     "type": "git",
-    "url": "https://github.com/NihilDigit/codex-reviewer.git"
+    "url": "https://github.com/NihilDigit/agent-reviewer.git"
   },
   "license": "MIT",
   "icon": "assets/icon.png",
@@ -17,7 +17,7 @@
   "capabilities": {
     "untrustedWorkspaces": {
       "supported": false,
-      "description": "Codex Reviewer writes a workspace mirror file and updates the repository-local Git exclude file."
+      "description": "Agent Reviewer writes a workspace mirror file and updates the repository-local Git exclude file."
     }
   },
   "categories": [
@@ -30,162 +30,172 @@
   "contributes": {
     "commands": [
       {
-        "command": "codexReviewer.addComment",
+        "command": "agentReviewer.addComment",
         "title": "Add review comment",
         "enablement": "!commentIsEmpty"
       },
       {
-        "command": "codexReviewer.replyComment",
+        "command": "agentReviewer.replyComment",
         "title": "Add note",
         "enablement": "!commentIsEmpty"
       },
       {
-        "command": "codexReviewer.editComment",
+        "command": "agentReviewer.editComment",
         "title": "Edit note"
       },
       {
-        "command": "codexReviewer.saveComment",
+        "command": "agentReviewer.saveComment",
         "title": "Save note",
         "enablement": "!commentIsEmpty"
       },
       {
-        "command": "codexReviewer.deleteComment",
+        "command": "agentReviewer.deleteComment",
         "title": "Delete note"
       },
       {
-        "command": "codexReviewer.deleteThread",
+        "command": "agentReviewer.deleteThread",
         "title": "Delete thread"
       },
       {
-        "command": "codexReviewer.stageToCodex",
-        "title": "Codex Reviewer: Add Reviews to Codex Chat",
+        "command": "agentReviewer.flushReviews",
+        "title": "Agent Reviewer: Flush Reviews to File",
         "icon": "$(send)"
       },
       {
-        "command": "codexReviewer.addCodexComment",
-        "title": "Codex Reviewer: Add Codex Comment",
+        "command": "agentReviewer.addReviewComment",
+        "title": "Agent Reviewer: Add Review Comment",
         "icon": "$(comment-add)"
       },
       {
-        "command": "codexReviewer.clearStaged",
-        "title": "Codex Reviewer: Clear Staged Reviews",
+        "command": "agentReviewer.clearStaged",
+        "title": "Agent Reviewer: Clear Staged Reviews",
         "icon": "$(clear-all)"
       },
       {
-        "command": "codexReviewer.openPendingFile",
-        "title": "Codex Reviewer: Open Pending Reviews File"
+        "command": "agentReviewer.openPendingFile",
+        "title": "Agent Reviewer: Open Pending Reviews File"
       }
     ],
     "menus": {
       "commandPalette": [
         {
-          "command": "codexReviewer.addComment",
+          "command": "agentReviewer.addComment",
           "when": "false"
         },
         {
-          "command": "codexReviewer.replyComment",
+          "command": "agentReviewer.replyComment",
           "when": "false"
         },
         {
-          "command": "codexReviewer.editComment",
+          "command": "agentReviewer.editComment",
           "when": "false"
         },
         {
-          "command": "codexReviewer.saveComment",
+          "command": "agentReviewer.saveComment",
           "when": "false"
         },
         {
-          "command": "codexReviewer.deleteComment",
+          "command": "agentReviewer.deleteComment",
           "when": "false"
         },
         {
-          "command": "codexReviewer.deleteThread",
+          "command": "agentReviewer.deleteThread",
           "when": "false"
         }
       ],
       "comments/commentThread/context": [
         {
-          "command": "codexReviewer.addComment",
+          "command": "agentReviewer.addComment",
           "group": "inline",
-          "when": "commentController == codex-review && commentThreadIsEmpty"
+          "when": "commentController == agent-review && commentThreadIsEmpty"
         },
         {
-          "command": "codexReviewer.replyComment",
+          "command": "agentReviewer.replyComment",
           "group": "inline",
-          "when": "commentController == codex-review && !commentThreadIsEmpty"
+          "when": "commentController == agent-review && !commentThreadIsEmpty"
         }
       ],
       "comments/comment/title": [
         {
-          "command": "codexReviewer.editComment",
+          "command": "agentReviewer.editComment",
           "group": "inline@1",
-          "when": "commentController == codex-review && comment =~ /canEdit/"
+          "when": "commentController == agent-review && comment =~ /canEdit/"
         },
         {
-          "command": "codexReviewer.deleteComment",
+          "command": "agentReviewer.deleteComment",
           "group": "inline@2",
-          "when": "commentController == codex-review"
+          "when": "commentController == agent-review"
         }
       ],
       "comments/comment/context": [
         {
-          "command": "codexReviewer.saveComment",
+          "command": "agentReviewer.saveComment",
           "group": "inline",
-          "when": "commentController == codex-review"
+          "when": "commentController == agent-review"
         }
       ],
       "comments/commentThread/title": [
         {
-          "command": "codexReviewer.stageToCodex",
+          "command": "agentReviewer.flushReviews",
           "group": "inline@1",
-          "when": "commentController == codex-review"
+          "when": "commentController == agent-review"
         },
         {
-          "command": "codexReviewer.deleteThread",
+          "command": "agentReviewer.deleteThread",
           "group": "inline@2",
-          "when": "commentController == codex-review"
+          "when": "commentController == agent-review"
         }
       ],
       "editor/title": [
         {
-          "command": "codexReviewer.stageToCodex",
+          "command": "agentReviewer.flushReviews",
           "group": "navigation",
-          "when": "isInDiffEditor && codexReviewer.hasStaged"
+          "when": "isInDiffEditor && agentReviewer.hasStaged"
         },
         {
-          "command": "codexReviewer.clearStaged",
+          "command": "agentReviewer.clearStaged",
           "group": "navigation",
-          "when": "codexReviewer.hasStaged"
+          "when": "agentReviewer.hasStaged"
         }
       ],
       "editor/context": [
         {
-          "command": "codexReviewer.addCodexComment",
-          "group": "codex@1",
+          "command": "agentReviewer.addReviewComment",
+          "group": "agent-reviewer@1",
           "when": "editorTextFocus"
         }
       ]
     },
     "keybindings": [
       {
-        "command": "codexReviewer.addCodexComment",
+        "command": "agentReviewer.addReviewComment",
         "key": "ctrl+alt+c",
         "mac": "cmd+alt+c",
         "when": "editorTextFocus"
       }
     ],
     "configuration": {
-      "title": "Codex Reviewer",
+      "title": "Agent Reviewer",
       "properties": {
-        "codexReviewer.pendingFile": {
+        "agentReviewer.pendingFile": {
           "type": "string",
-          "default": ".codex/pending-reviews.md",
-          "description": "Workspace-relative path of the file that mirrors the staged reviews and is attached to Codex chat"
+          "default": ".agent-reviewer/pending-reviews.md",
+          "description": "Workspace-relative path of the file that mirrors the staged reviews and is handed to the agent (Codex chat chip and/or Kimi CLI hook)"
         },
-        "codexReviewer.gitExclude": {
+        "agentReviewer.gitExclude": {
           "type": "boolean",
           "default": true,
-          "description": "Automatically add the pending reviews file to the repository's .git/info/exclude so it never shows up in git status"
+          "description": "Automatically add the pending reviews file (and its .consumed marker) to the repository's .git/info/exclude so they never show up in git status"
+        },
+        "agentReviewer.targets.codex": {
+          "type": "boolean",
+          "default": true,
+          "description": "Attach the pending reviews file to the Codex chat composer when flushing reviews"
+        },
+        "agentReviewer.targets.kimi": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable the Kimi CLI hook protocol: watch the pending reviews file and clear staged reviews when the agent consumes it"
         }
       }
     }
@@ -195,7 +205,7 @@
     "watch": "esbuild src/extension.ts --bundle --outfile=out/extension.js --external:vscode --format=cjs --platform=node --sourcemap --watch",
     "typecheck": "tsc --noEmit",
     "test": "bun test",
-    "package:marketplace": "cp README.md .README.md.bak; sed -i 's#https://raw.githubusercontent.com/NihilDigit/codex-reviewer/main/assets/flow.svg#assets/flow.png#' README.md; vsce package; rc=$?; mv .README.md.bak README.md; exit $rc",
+    "package:marketplace": "cp README.md .README.md.bak; sed -i 's#https://raw.githubusercontent.com/NihilDigit/agent-reviewer/main/assets/flow.svg#assets/flow.png#' README.md; vsce package; rc=$?; mv .README.md.bak README.md; exit $rc",
     "vscode:prepublish": "npm run compile"
   },
   "devDependencies": {
